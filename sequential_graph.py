@@ -24,7 +24,7 @@ def second_node(state: AgentState) -> AgentState:
 def third_node(state: AgentState) -> AgentState:
     """This is the third node of our sequence"""
     
-    state['final'] = state['final'] + f" Your skills are as follows: {', '.join(state['skills'])}"
+    state['final'] = state['final'] + f" Your skills are as follows: {', '.join(state['skills'][:-1])} and {state['skills'][-1]}."
     return state
 
 graph = StateGraph(AgentState)
