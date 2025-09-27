@@ -6,6 +6,7 @@ from IPython.display import Image, display
 class AgentState(TypedDict):
     name: str
     age: str
+    skills: list[str]
     final: str
     
 def first_node(state: AgentState) -> AgentState:
@@ -20,14 +21,22 @@ def second_node(state: AgentState) -> AgentState:
     state['final'] = state['final'] + f"You are {state['age']} years old!"
     return state
 
+def third_node(state: AgentState) -> AgentState:
+    """This is the third node of our sequence"""
+    
+    state['final'] = state['final'] + f" Your skills are as follows: {', '.join(state['skills'])}"
+    return state
+
 graph = StateGraph(AgentState)
 
 graph.add_node("first_node", first_node)
 graph.add_node("second_node", second_node)
+graph.add_node("third_node", third_node)
 
 graph.set_entry_point("first_node")
 graph.add_edge("first_node", "second_node")
-graph.set_finish_point("second_node")
+graph.add_edge("second_node", "third_node")
+graph.set_finish_point("third_node")
 
 app = graph.compile()
 
@@ -39,5 +48,5 @@ app = graph.compile()
 
 print(app.get_graph().print_ascii())
 
-result = app.invoke({"name": "Darshil", "age": "23"})
+result = app.invoke({"name": "Darshil", "age": "23", "skills": ["Python", "JavaScript", "C++"]})
 print(result)
